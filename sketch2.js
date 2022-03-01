@@ -9,7 +9,7 @@ var timerValue = 10;
 var startButton;
 
 //Run Objects
-var predatorObjects = [];
+var predatoridleObjects = [];
 var predatorRunObjects = [];
 var predatorRunLeftObjects = [];
 var currentObjects;
@@ -42,15 +42,16 @@ var trees = [125, 200, 375, 425, 475];
 
 
 //alien, sky,  & font preloads
-let myfont;
+//let myfont;
 var img;
-function preload() {
-  result = loadStrings('assets/Images/predatoridle (1).png');
-  runresult = loadStrings('assets/Images/predator (1).png');
-  runresultleft = loadStrings('assets/predatorrun (1).png');
+function preload()
+ {
+  result = loadStrings('assets/Images/predatoridle.txt');
+  runresult = loadStrings('assets/Images/predatorrun.txt');
+  runresultleft = loadStrings('assets/predatorleft.txt');
 
   sky = loadImage('assets/Images/nightsky.jpg');
-  myfont = loadFont('assets/SyneTactile-Regular.ttf');
+  //myfont = loadFont('assets/SyneTactile-Regular.ttf');
  
 }
 
@@ -69,8 +70,8 @@ function setup()
     speed_y = random(1, 10);
  
   //timer
-  textAlign(CENTER);
-  setInterval(timeIt, 1000);
+  //textAlign(CENTER);
+  //setInterval(timeIt, 1000);
 
 //Predator Idle
 
@@ -90,7 +91,13 @@ function setup()
     
 }
 
+ // assign the idle objects to the generic object variable
+  currentObjects = predatorIdleObjects;
 
+ // create an interval for the idle animation
+  myInterval = setInterval(incrementIndex, 50);
+
+}
 
 
 
@@ -171,6 +178,29 @@ fill(165,42,42)
 arc
 }
 
+
+  //background(120);
+
+  // check to see if any keys have been pressed
+  if (keyIsPressed) 
+  {
+    // stop the idle interval
+    clearInterval(myInterval);
+    // set the variable to null - we will check for this later
+    myInterval = null;
+
+    // use this if statement to slow the movement animations
+    index++;
+    if (index > 3) 
+    {
+      incrementIndex();
+      index = 0;
+    }
+
+    // move to the right
+    if (key == "d") 
+    {
+
   // assign the generic animation and object variables Predator
       currentAnimation = runanimation;
       currentObjects = predatorRunObjects;
@@ -185,15 +215,75 @@ arc
       // move the animation by updating the x component
       currentObjects[counter].setX(currentObjects[counter].getX() + 2);
 
+// make sure you you assign the x component of the left movement too
+      for (var i = 0; i < predatorRunLeftObjects.length; i++)
+      {
+        predatorRunLeftObjects[i].setX(currentObjects[0].getX());
+      }
+     // make sure the movement object is assigned to the current object again
+      predatorRunObjects = currentObjects;
 
-  fill(0);
-    textFont(myfont);
-    textSize(25);
-    text("Kim Coplien",50,550);
-    text("Moonlit Forest",175,50);
+      // this just the opposite of the above.  The character moves to the left here instead
+    } 
+    else if (key == "a") 
+    {
+
+      currentAnimation = leftrunanimation;
+      currentObjects = predatorRunLeftObjects;
+
+      if (counter >= currentAnimation.length) 
+      {
+        counter = 0;
+      }
+      currentObjects[counter].setX(currentObjects[counter].getX() - 2);
+
+      for (var i = 0; i < predatorRunObjects.length; i++)
+      {
+        predatorRunObjects[i].setX(currentObjects[0].getX());
+      }
+        
+
+      predatorRunLeftObjects = currentObjects;
+    }
+
+    for (var i = 0; i < predatorObjects.length; i++)
+      predatorObjects[i].setX(currentObjects[0].getX());
+
+  } 
+  // this last part just checks for the idle and resets the animations
+  else 
+  {
+    if (myInterval == null) 
+    {
+      myInterval = setInterval(incrementIndex, 50);
+    }
+    currentObjects = predatorObjects;
+    currentAnimation = animation;
+  }
+
+  // display the images regardless of the movement or idle
+  image(currentAnimation[counter], currentObjects[counter].getX(), currentObjects[counter].getY());
+
+}
+
+function incrementIndex() 
+{
+  // increment the index
+  counter += 1;
+  // if we reach the end of the array, start over
+  if (counter >= currentObjects.length) 
+  {
+    counter = 0;
+  }
+
+  //fill(0);
+    //textFont(myfont);
+    //textSize(25);
+    //text("Kim Coplien",50,550);
+    //text("Moonlit Forest",175,50);
 
 //timer
- if (timerValue >= 10) {
+ /*if (timerValue >= 10) {
     text("0:" + timerValue, width / 2, height / 2);
   }
   if (timerValue < 10) {
@@ -207,9 +297,9 @@ arc
 function timeIt() {
   if (timerValue > 0) 
 
-    timerValue--;
+    timerValue--;*/
 
-}
+
 
 
 

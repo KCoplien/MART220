@@ -50,7 +50,7 @@ function preload() {
   runresultleft = loadStrings('assets/predatorrun (1).png');
 
   sky = loadImage('assets/Images/nightsky.jpg');
-  myfont = loadFont('assets/SyneTactile-Regular.ttf');
+  //myfont = loadFont('assets/SyneTactile-Regular.ttf');
  
 }
 
